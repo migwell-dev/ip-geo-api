@@ -74,4 +74,16 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/lookup', async (req, res) => {
+  const { ip } = req.query;
+  const target = ip ? `https://ipinfo.io/${ip}/geo` : 'https://ipinfo.io/geo';
+  
+  try {
+    const response = await axios.get(target);
+    res.json(response.data);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch' });
+  }
+});
+
 export default router;
