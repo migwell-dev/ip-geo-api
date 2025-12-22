@@ -8,7 +8,15 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://geo-frontend-ten.vercel.app',
+    'https://ip-geo-api.vercel.app',
+    /^http:\/\/localhost:\d+$/
+  ],
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 app.use('/api', authRoutes);
