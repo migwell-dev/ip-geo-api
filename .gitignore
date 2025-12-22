@@ -32,3 +32,5 @@ coverage/
 *.njsproj
 *.sln
 *.swp
+.vercel
+.env*.local

@@ -5,6 +5,8 @@ import db from '../db/database.js';
 
 const router = express.Router();
 
+console.log('authRoutes loaded');
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
