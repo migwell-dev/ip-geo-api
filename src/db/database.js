@@ -36,8 +36,25 @@ if (process.env.DATABASE_URL) {
 } else {
   const sqlite = new Database('data.db');
 
-  sqlite.prepare(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, password TEXT)`).run();
-  sqlite.prepare(`CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, ip_address TEXT, city TEXT, region TEXT, country TEXT, loc TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)`).run();
+  sqlite.prepare(`CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE,
+  password TEXT)`)
+  .run();
+
+  sqlite.prepare(`
+  CREATE TABLE IF NOT EXISTS history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    user_id INTEGER, 
+    ip_address TEXT, 
+    city TEXT, 
+    region TEXT, 
+    country TEXT, 
+    lat REAL,
+    lng REAL, 
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`)
+  .run();
 
   db = {
     query: async (text, params) => {

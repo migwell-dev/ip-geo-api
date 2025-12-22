@@ -19,14 +19,23 @@ router.get('/', authMiddleware, async (req, res) => {
 
 // POST new search result to history
 router.post('/', authMiddleware, async (req, res) => {
-  const { ip_address, city, region, country } = req.body;
+  const { ip, city, region, country, loc } = req.body;
+  
+  let lat = null;
+  let lng = null;
+
+  if (loc && typeof loc === 'string') {
+    const parts = loc.split(',');
+    lat = parseFloat(parts[0]);
+    lng = parseFloat(parts[1]);
+  }
 
   try {
     const result = await db.query(
-      'INSERT INTO history (user_id, ip_address, city, region, country) VALUES (?, ?, ?, ?, ?)',
-      [req.user.id, ip_address, city, region, country]
+      'INSERT INTO history (user_id, ip_address, city, region, country, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [req.user.id, ip, city, region, country, lat, lng]
     );
-
+    
     res.json({ id: result.lastId });
   } catch (error) {
     res.status(500).json({ message: 'Error saving history', error: error.message });
