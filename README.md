@@ -15,7 +15,7 @@ A robust Node.js backend built for a Flutter frontend. This API handles user aut
 │   │   ├── auth.js        # Login and Authentication logic
 │   │   └── history.js     # IP History CRUD operations
 │   ├── seed/
-│   └── seedUsers.js   # Database seeder for test users
+│       └── seedUsers.js   # Database seeder for test users
 ├── .env.example           # Environment variables example (actual .env optional for local)
 ├── data.db                # SQLite database (Auto-generated locally)
 ├── vercel.json            # Vercel deployment configuration
