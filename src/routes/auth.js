@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../db/database.js';
+import axios from 'axios';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || '55eafd2b680aa54a59c3316c35cd233351828a059ef99c7a9c94a65dae69fde4';
@@ -81,6 +82,7 @@ router.get('/lookup', async (req, res) => {
   try {
     const response = await axios.get(target);
     res.json(response.data);
+    console.log(response);
   } catch (e) {
     res.status(500).json({ error: 'Failed to fetch' });
   }
