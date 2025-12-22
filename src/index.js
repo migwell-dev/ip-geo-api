@@ -13,4 +13,15 @@ app.use(express.json());
 app.use('/api', authRoutes);
 app.use('/api/history', historyRoutes);
 
-app.listen(8000, () => console.log('Server running on port 8000'));
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+const PORT = process.env.PORT || 8000;
+
+// listen if in dev mode
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+export default app;

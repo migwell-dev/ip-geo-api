@@ -4,32 +4,54 @@ import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/', authMiddleware, (req, res) => {
-  const history = db.prepare('SELECT * FROM history WHERE user_id = ? ORDER BY timestamp DESC')
-    .all(req.user.id);
-  res.json(history);
+// GET all history for the logged-in user
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const result = await db.query(
+      'SELECT * FROM history WHERE user_id = ? ORDER BY timestamp DESC',
+      [req.user.id]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching history', error: error.message });
+  }
 });
 
-router.post('/', authMiddleware, (req, res) => {
+// POST new search result to history
+router.post('/', authMiddleware, async (req, res) => {
   const { ip_address, city, region, country } = req.body;
-  const info = db.prepare(
-    'INSERT INTO history (user_id, ip_address, city, region, country) VALUES (?, ?, ?, ?, ?)'
-  ).run(req.user.id, ip_address, city, region, country);
-  
-  res.json({ id: info.lastInsertRowid });
+
+  try {
+    const result = await db.query(
+      'INSERT INTO history (user_id, ip_address, city, region, country) VALUES (?, ?, ?, ?, ?)',
+      [req.user.id, ip_address, city, region, country]
+    );
+
+    res.json({ id: result.lastId });
+  } catch (error) {
+    res.status(500).json({ message: 'Error saving history', error: error.message });
+  }
 });
 
-router.delete('/', authMiddleware, (req, res) => {
+// DELETE multiple history items
+router.delete('/', authMiddleware, async (req, res) => {
   const { ids } = req.body;
-  
+
   if (!ids || !Array.isArray(ids) || ids.length === 0) {
     return res.status(400).json({ message: 'No IDs provided' });
   }
 
-  const placeholders = ids.map(() => '?').join(',');
-  db.prepare(`DELETE FROM history WHERE id IN (${placeholders}) AND user_id = ?`)
-    .run(...ids, req.user.id);
-  res.json({ message: 'History cleared' });
+  try {
+    const placeholders = ids.map(() => '?').join(',');
+
+    const queryText = `DELETE FROM history WHERE id IN (${placeholders}) AND user_id = ?`;
+
+    await db.query(queryText, [...ids, req.user.id]);
+
+    res.json({ message: 'Selected history cleared' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting history', error: error.message });
+  }
 });
 
 export default router;
