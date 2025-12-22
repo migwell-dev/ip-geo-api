@@ -11,10 +11,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/', authRoutes);
-app.use('/history', historyRoutes);
+app.use('/api', authRoutes);
+app.use('/api/history', historyRoutes);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({ message: "API is running at the /api root" });
 });
 
