@@ -59,10 +59,10 @@ npm run seed
 * **Email:** `test@example.com`
 * **Password:** `password123`
 
-### 5. Start the Server
+### 5. Start the Server Locally
 
 ```bash
-npm start
+npm run dev
 ```
 
 The server will run at `http://localhost:8000`.
