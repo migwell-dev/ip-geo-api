@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth.js';
-import historyRoutes from './routes/history.js';
+import authRoutes from '../src/routes/auth.js';
+import historyRoutes from '../src/routes/history.js';
 
 dotenv.config();
 const app = express();
