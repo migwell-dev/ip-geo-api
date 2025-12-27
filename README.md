@@ -89,7 +89,6 @@ You can create a `.env` file in the root directory. **None of these are strictly
 | --- | --- | --- |
 | `POST` | `/api/login` | Authenticates user and returns a JWT. |
 | `POST` | `/api/signup` | Creates a new user. |
-| `GET` | `/api/lookup` | Looks up geo info from ipinfo.io. |
 
 ### IP Lookup
 
